@@ -5,15 +5,12 @@ require("dotenv").config();
 
 app.use(async (ctx) => {
   try {
-    // const url1 = process.env.MAKEUPBRANCH_URL;
-    // const url2 = process.env.MAKEUPBRANCH_URL;
     const url1 = "https://jsonplaceholder.typicode.com/users";
     const url2 = "https://jsonplaceholder.typicode.com/posts";
     
     console.log('Attempting to fetch data from:', url1, url2);
     const aggregatedData = await fetchData(url1, url2);
     
-    console.log('Fetch successful:', aggregatedData);
     ctx.body = aggregatedData;
   } catch (error) {
     console.error('Request processing error:', error);

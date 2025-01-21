@@ -11,12 +11,12 @@ async function fetchData(url1, url2) {
       axios.get(url1),
       axios.get(url2),
     ]);
-    const dataforever = response1.data.splice(0,2);
-    const dataILoveName = response2.data;
+    const AnyName = response1.data ;
+    const NameWhichYouPrefer = response2.data;
 
     const aggregatedData = {
-      dataforever,
-      dataILoveName,
+      AnyName,
+      NameWhichYouPrefer,
     };
 
     return aggregatedData;
