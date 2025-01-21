@@ -3,9 +3,21 @@ const app = new koa();
 const { fetchDataWithCache } = require("./aggregator");
 require("dotenv").config();
 
+
+app.use(async (ctx, next) => {
+  try {
+    await next();
+  } catch (error) {
+    ctx.status = error.response.status || 500;
+    ctx.body = {
+      message: error.message,
+    };
+  }
+});
+
 app.use(async (ctx) => {
   try {
-    const url1 = "https://jsonplaceholder.typicode.com/users";
+    const url1 = "https://jsonplaceholder.typicode.com/usessrs";
     const url2 = "https://jsonplaceholder.typicode.com/posts";
     
     console.log('Attempting to fetch data from:', url1, url2);

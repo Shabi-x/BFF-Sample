@@ -1,8 +1,25 @@
 const axios = require("axios");
+const axiosRetry = require('axios-retry').default;
 const FormData = require("form-data");
 
 const cacheNode = require("node-cache");
 const cache = new cacheNode({ stdTTL: 60 });
+
+axiosRetry(axios, {
+  retries: 3, // 重试3次
+  retryDelay: axiosRetry.exponentialDelay,  
+  retryCondition: (error) => {
+    console.log('Retry condition触发', error.message);
+    return (
+      axiosRetry.isNetworkOrIdempotentRequestError(error) || 
+      (error.response && error.response.status >= 500)
+    );
+  },
+  onRetry: (retryCount, error) => {
+    console.log(`第 ${retryCount} 次重试:`, error.message);
+  }
+});
+
 /**
  * 数据聚合
  * 实现请求转发、并行请求和数据转换功能
@@ -34,7 +51,8 @@ async function fetchDataWithCache(url1, url2) {
     cache.set(cacheKey, aggregatedData);
     return aggregatedData;
   } catch (error) {
-    console.error(error);
+    // console.error(error);
+    // console.error('访问出错了');
   }
 }
 
