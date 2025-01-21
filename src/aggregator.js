@@ -1,11 +1,24 @@
 const axios = require("axios");
 const FormData = require("form-data");
 
+const cacheNode = require("node-cache");
+const cache = new cacheNode({ stdTTL: 60 });
 /**
  * 数据聚合
  * 实现请求转发、并行请求和数据转换功能
  */
-async function fetchData(url1, url2) {
+async function fetchDataWithCache(url1, url2) {
+
+
+  const cacheKey = `${url1}-${url2}`;
+  const cachedData = cache.get(cacheKey);
+  if (cachedData) {
+    console.error(`This is Cache HIT for key: ${cacheKey}`);
+    return cachedData;
+  }else{
+    console.log('fuck no cache');
+  }
+
   try {
     const [response1, response2] = await Promise.all([
       axios.get(url1),
@@ -18,7 +31,7 @@ async function fetchData(url1, url2) {
       AnyName,
       NameWhichYouPrefer,
     };
-
+    cache.set(cacheKey, aggregatedData);
     return aggregatedData;
   } catch (error) {
     console.error(error);
@@ -58,4 +71,4 @@ async function fetchDataMixed(url1, url2, postData) {
     };
   }
 }
-module.exports = { fetchData, fetchDataMixed };
+module.exports = { fetchDataWithCache, fetchDataMixed };

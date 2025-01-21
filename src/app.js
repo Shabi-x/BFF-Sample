@@ -1,6 +1,6 @@
 const koa = require("koa");
 const app = new koa();
-const { fetchData } = require("./aggregator");
+const { fetchDataWithCache } = require("./aggregator");
 require("dotenv").config();
 
 app.use(async (ctx) => {
@@ -9,7 +9,7 @@ app.use(async (ctx) => {
     const url2 = "https://jsonplaceholder.typicode.com/posts";
     
     console.log('Attempting to fetch data from:', url1, url2);
-    const aggregatedData = await fetchData(url1, url2);
+    const aggregatedData = await fetchDataWithCache(url1, url2);
     
     ctx.body = aggregatedData;
   } catch (error) {
