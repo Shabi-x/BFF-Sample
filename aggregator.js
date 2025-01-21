@@ -1,5 +1,5 @@
 const axios = require("axios");
-const FormData = require('form-data');
+const FormData = require("form-data");
 
 /**
  * 数据聚合
@@ -11,12 +11,12 @@ async function fetchData(url1, url2) {
       axios.get(url1),
       axios.get(url2),
     ]);
-    const data1 = response1.data;
-    const data2 = response2.data;
+    const dataforever = response1.data.splice(0,2);
+    const dataILoveName = response2.data;
 
     const aggregatedData = {
-      data1,
-      data2,
+      dataforever,
+      dataILoveName,
     };
 
     return aggregatedData;
